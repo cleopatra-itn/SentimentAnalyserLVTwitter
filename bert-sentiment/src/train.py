@@ -13,6 +13,14 @@ from transformers import AdamW
 from transformers import get_linear_schedule_with_warmup
 from loguru import logger
 from utils import categorical_accuracy
+
+logger.add("experiment.log")
+
+SEED = 1234
+
+torch.manual_seed(SEED)
+torch.backends.cudnn.deterministic = True
+
 def run():
     label_vec = {"0": 0, "1": 1, "-1": 2}
     df_train = pd.read_csv(config.DATASET_LOCATION+"train.csv").fillna("none")
@@ -23,6 +31,8 @@ def run():
     df_valid.label = df_valid.label.apply(
         lambda x: label_vec[x.replace("__label__", "")]
     )
+    logger.info(f"Train size".format(len(df_train)))
+    logger.info(f"Test size".format(len(df_valid)))
 
     train_dataset = dataset.BERTDataset(
         review=df_train.text.values,
