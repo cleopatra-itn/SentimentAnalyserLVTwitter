@@ -17,12 +17,12 @@ from utils import categorical_accuracy, label_encoder
 from torch.utils.tensorboard import SummaryWriter
 
 
-SEED = 1234
-random.seed(SEED)
-np.random.seed(SEED)
-torch.manual_seed(SEED)
-torch.cuda.manual_seed(SEED)
-torch.backends.cudnn.deterministic = True
+# SEED = 1234
+# random.seed(SEED)
+# np.random.seed(SEED)
+# torch.manual_seed(SEED)
+# torch.cuda.manual_seed(SEED)
+# torch.backends.cudnn.deterministic = True
 
 writer = SummaryWriter()
 logger.add("experiment.log")
@@ -115,7 +115,7 @@ def run():
             train_data_loader, model, optimizer, device, scheduler)
 
         for tag, parm in model.named_parameters():
-            if parm.data:
+            if parm.grad:
                 writer.add_histogram(tag, parm.grad.data.cpu().numpy(), epoch)
 
         outputs, targets, val_loss, val_acc = engine.eval_fn(
