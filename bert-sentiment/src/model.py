@@ -12,9 +12,9 @@ class BERTBaseUncased(nn.Module):
         # self.fc = nn.Linear(768, 768)
         self.out = nn.Linear(768, 3)
 
-        # nn.init.xavier_uniform(self.fc.weight)
-        for p in self.bert.parameters():
-            p.requires_grad = False
+        nn.init.xavier_uniform(self.out.weight)
+        # for p in self.bert.parameters():
+        #     p.requires_grad = False
 
     def forward(self, ids, mask, token_type_ids):
         _, o2 = self.bert(

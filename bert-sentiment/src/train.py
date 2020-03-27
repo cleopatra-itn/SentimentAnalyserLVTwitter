@@ -58,7 +58,7 @@ def run():
     train_data_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=config.TRAIN_BATCH_SIZE,
-        num_workers=4,
+        num_workers=4, shuffle=True
     )
 
     valid_dataset = dataset.BERTDataset(
