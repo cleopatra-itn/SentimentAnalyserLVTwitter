@@ -22,7 +22,7 @@ def train_fn(data_loader, model, optimizer, device, scheduler):
         token_type_ids = token_type_ids.to(device, dtype=torch.long)
         mask = mask.to(device, dtype=torch.long)
         targets = targets.to(device, dtype=torch.long)
-
+        
         optimizer.zero_grad()
         outputs = model(
             ids=ids,
@@ -32,6 +32,7 @@ def train_fn(data_loader, model, optimizer, device, scheduler):
 
         loss = loss_fn(outputs, targets)
         loss.backward()
+        
         optimizer.step()
         scheduler.step()
         train_loss += loss.item()
