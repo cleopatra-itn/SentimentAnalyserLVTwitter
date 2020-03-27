@@ -115,7 +115,8 @@ def run():
             train_data_loader, model, optimizer, device, scheduler)
 
         for tag, parm in model.named_parameters():
-            writer.add_histogram(tag, parm.grad.data.cpu().numpy(), epoch)
+            if parm.data:
+                writer.add_histogram(tag, parm.grad.data.cpu().numpy(), epoch)
 
         outputs, targets, val_loss, val_acc = engine.eval_fn(
             valid_data_loader, model, device)
