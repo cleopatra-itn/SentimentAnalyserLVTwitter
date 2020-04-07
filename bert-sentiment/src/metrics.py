@@ -12,6 +12,8 @@ with open(file_path) as input_file:
     current_epoch=None
     for line in input_file:
         line= line.strip()
+        if line.find("Bert Model") >-1:
+            stastics["Bert Model"] =line
         if line.find("Train file") >-1:
             stastics["Train file"] =line
         if line.find("Valid file") >-1:

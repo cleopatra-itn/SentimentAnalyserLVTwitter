@@ -1,4 +1,5 @@
 import random
+import datetime
 import config
 import dataset
 import engine
@@ -30,11 +31,19 @@ logger.add("experiment.log")
 
 def run():
 
-    train_file = config.DATASET_LOCATION + "gold.prep.train.csv"
+    datasets =[
+    "gold.prep-auto.full.prep.{0}.csv", 
+    "gold.prep-auto.no-emoticons.prep.{0}.csv", 
+    "gold.prep-auto.prep.{0}.csv",
+    "gold.prep-english.prep.{0}.csv" ,
+    "gold.prep-peisenieks.prep.{0}.csv",
+    "gold.prep.{0}.csv"
+    ] 
+    train_file = config.DATASET_LOCATION + datasets[1].format("train")
     df_train = pd.read_csv(train_file).fillna("none")
     df_train.label = df_train.label.apply(label_encoder)
 
-    valid_file = config.DATASET_LOCATION + "gold.prep.dev.csv"
+    valid_file = config.DATASET_LOCATION + datasets[1].format("dev") #"gold.prep-auto.full.prep.dev.csv" #gold.prep-auto.no-emoticons.prep.dev.csv" #gold.prep-auto.prep.dev.csv" #"gold.prep-english.prep.dev.csv" #"gold.prep-peisenieks.prep.dev.csv" #"gold.prep.dev.csv"
     df_valid = pd.read_csv(valid_file).fillna("none")
     df_valid.label = df_valid.label.apply(label_encoder)
 
@@ -42,6 +51,9 @@ def run():
     df_test = pd.read_csv(test_file).fillna("none")
     df_test.label = df_test.label.apply(label_encoder)
     
+    logger.info(f"Bert Model: {config.BERT_PATH}")
+    logger.info(f"Current date and time :{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ")
+
     logger.info(f"Train file: {train_file}")
     logger.info(f"Valid file: {valid_file}")
     logger.info(f"Test file: {test_file}")
