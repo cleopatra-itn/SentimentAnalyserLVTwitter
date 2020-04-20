@@ -39,11 +39,12 @@ def run():
     "gold.prep-peisenieks.prep.{0}.csv",
     "gold.prep.{0}.csv"
     ] 
-    train_file = config.DATASET_LOCATION + datasets[1].format("train")
+    dataset_index = 0 #0-5
+    train_file = config.DATASET_LOCATION + datasets[dataset_index].format("train")
     df_train = pd.read_csv(train_file).fillna("none")
     df_train.label = df_train.label.apply(label_encoder)
 
-    valid_file = config.DATASET_LOCATION + datasets[1].format("dev") #"gold.prep-auto.full.prep.dev.csv" #gold.prep-auto.no-emoticons.prep.dev.csv" #gold.prep-auto.prep.dev.csv" #"gold.prep-english.prep.dev.csv" #"gold.prep-peisenieks.prep.dev.csv" #"gold.prep.dev.csv"
+    valid_file = config.DATASET_LOCATION + datasets[dataset_index].format("dev") #"gold.prep-auto.full.prep.dev.csv" #gold.prep-auto.no-emoticons.prep.dev.csv" #gold.prep-auto.prep.dev.csv" #"gold.prep-english.prep.dev.csv" #"gold.prep-peisenieks.prep.dev.csv" #"gold.prep.dev.csv"
     df_valid = pd.read_csv(valid_file).fillna("none")
     df_valid.label = df_valid.label.apply(label_encoder)
 
