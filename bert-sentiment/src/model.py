@@ -11,14 +11,11 @@ class BERTBaseUncased(nn.Module):
         # self.bert = transformers.BertModel.from_pretrained(config.BERT_PATH) #AlbertModel
 
         self.bert_drop = nn.Dropout(0.3)
-        # self.tanh = nn.Tanh()
-        # self.fc = nn.Linear(768, 768)
+
         self.out = nn.Linear(768, 3)
         # self.out = nn.Linear(256, 3)
 
         nn.init.xavier_uniform_(self.out.weight)
-        # for p in self.bert.parameters():
-        #     p.requires_grad = False
 
     def forward(self, ids, mask, token_type_ids):
         _, o2 = self.bert(
