@@ -26,6 +26,8 @@ torch.backends.cudnn.deterministic = True
 writer = SummaryWriter()
 logger.add("experiment.log")
 
+def write_embeddings_to_file():
+    
 
 def run():
 
