@@ -14,10 +14,10 @@ MODEL_PATH = "model.bin"
 # BERT_PATH = "bert-base-multilingual-cased"
 
 # 2 EPOCH Version
-# BERT_PATH = "/home/TILDE.LV/gaurish.thakkar/experiments/bert-twitter-fine-tunning/LatvianTwittermBERT-v1"
+BERT_PATH = "/home/TILDE.LV/gaurish.thakkar/experiments/bert-twitter-fine-tunning/LatvianTwittermBERT-v1"
 
 # 7 EPOCH Version
-BERT_PATH = "/home/TILDE.LV/gaurish.thakkar/experiments/bert-twitter-language-pretraining/models/LatvianTwittermBERT-v1"
+# BERT_PATH = "/home/TILDE.LV/gaurish.thakkar/experiments/bert-twitter-language-pretraining/models/LatvianTwittermBERT-v1"
 
 # 7 EPOCH Version + emoticons
 # BERT_PATH = "/home/TILDE.LV/gaurish.thakkar/experiments/bert-twitter-language-pretraining/models/LatvianTwittermBERT-v2/checkpoint-106000"

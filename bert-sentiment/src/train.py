@@ -18,18 +18,18 @@ from utils import categorical_accuracy, label_encoder
 from torch.utils.tensorboard import SummaryWriter
 
 
-# SEED = 1234
-# random.seed(SEED)
-# np.random.seed(SEED)
-# torch.manual_seed(SEED)
-# torch.cuda.manual_seed(SEED)
-# torch.backends.cudnn.deterministic = True
+SEED = 42
+random.seed(SEED)
+np.random.seed(SEED)
+torch.manual_seed(SEED)
+torch.cuda.manual_seed(SEED)
+torch.backends.cudnn.deterministic = True
 
 writer = SummaryWriter()
 logger.add("experiment.log")
 
 
-def run():
+def run(dataset_index):
 
     datasets =[
     "gold.prep-auto.full.prep.{0}.csv", 
@@ -39,7 +39,8 @@ def run():
     "gold.prep-peisenieks.prep.{0}.csv",
     "gold.prep.{0}.csv"
     ] 
-    dataset_index = 0 #0-5
+    # dataset_index = 5 #0-5
+
     train_file = config.DATASET_LOCATION + datasets[dataset_index].format("train")
     df_train = pd.read_csv(train_file).fillna("none")
     df_train.label = df_train.label.apply(label_encoder)
@@ -96,7 +97,7 @@ def run():
         num_workers=1
     )
 
-    device = torch.device("cuda")
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') #torch.device("cuda")
     model = BERTBaseUncased()
     model.to(device)
 
@@ -167,4 +168,7 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    run(2) #5 2 4 1 0 3 2
+    # uncomment if the same model needs to be run across all the datasets
+    # for i in range(1,7):
+        # run(i*-1)
