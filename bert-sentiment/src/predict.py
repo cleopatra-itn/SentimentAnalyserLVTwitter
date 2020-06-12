@@ -1,20 +1,20 @@
-import random
 import datetime
+import random
+
+import numpy as np
+import pandas as pd
+import torch
+import torch.nn as nn
+from absl import app, flags, logging
+from loguru import logger
+from sklearn import metrics, model_selection
+from torch.utils.tensorboard import SummaryWriter
+
 import config
 import dataset
 import engine
-import torch
-import pandas as pd
-import torch.nn as nn
-import numpy as np
-
 from model import BERTBaseUncased
-from sklearn import model_selection
-from sklearn import metrics
-from loguru import logger
 from utils import categorical_accuracy, label_encoder
-from torch.utils.tensorboard import SummaryWriter
-
 
 SEED = 42
 random.seed(SEED)
@@ -26,8 +26,6 @@ torch.backends.cudnn.deterministic = True
 writer = SummaryWriter()
 logger.add("experiment.log")
 
-def write_embeddings_to_file():
-    
 
 def run():
 
