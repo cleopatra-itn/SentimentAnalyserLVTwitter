@@ -78,3 +78,39 @@ def eval_fn(data_loader, model, device):
     eval_loss /= len(data_loader)
     eval_acc /= len(data_loader)
     return fin_outputs, fin_targets, eval_loss, eval_acc
+
+
+
+def predict_fn(data_loader, model, device, extract_features=False):
+    model.eval()
+   
+    fin_outputs = []
+    extracted_features =[]
+    with torch.no_grad():
+        for bi, d in tqdm(enumerate(data_loader), total=len(data_loader)):
+            ids = d["ids"]
+            token_type_ids = d["token_type_ids"]
+            mask = d["mask"]
+            targets = d["targets"]
+
+            ids = ids.to(device, dtype=torch.long)
+            token_type_ids = token_type_ids.to(device, dtype=torch.long)
+            mask = mask.to(device, dtype=torch.long)
+            
+            outputs = model(
+                ids=ids,
+                mask=mask,
+                token_type_ids=token_type_ids
+            )
+            if extract_features:
+                extracted_features.extend( model.extract_features(
+                ids=ids,
+                mask=mask,
+                token_type_ids=token_type_ids
+            ).cpu().detach().numpy().tolist())  
+            
+            fin_outputs.extend(torch.argmax(
+                outputs, dim=1).cpu().detach().numpy().tolist())
+
+    return fin_outputs, extracted_features
+

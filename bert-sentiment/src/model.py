@@ -25,3 +25,12 @@ class BERTBaseUncased(nn.Module):
         # bo = self.tanh(self.fc(bo)) # to be commented if original
         output = self.out(bo)
         return output
+
+    def extract_features(self, ids, mask, token_type_ids):
+        _, o2 = self.bert(
+            ids, 
+            attention_mask=mask,
+            token_type_ids=token_type_ids
+        )
+        bo = self.bert_drop(o2)
+        return bo
