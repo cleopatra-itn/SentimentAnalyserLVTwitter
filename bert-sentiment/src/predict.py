@@ -27,7 +27,7 @@ writer = SummaryWriter()
 logger.add("experiment.log")
 
 
-def run():
+def main(_):
 
     test_file = config.DATASET_LOCATION + "eval.prep.test.csv"
     df_test = pd.read_csv(test_file).fillna("none")
@@ -52,14 +52,16 @@ def run():
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = BERTBaseUncased()
+    model.load_state_dict(torch.load(config.MODEL_PATH, map_location=torch.device(device)))
     model.to(device)
   
 
     outputs, targets, test_loss, test_acc = engine.eval_fn(
         test_data_loader, model, device)
     test_mcc = metrics.matthews_corrcoef(outputs, targets)
+    print(test_loss, test_acc)
     logger.info(f"test_MCC_Score = {test_mcc:.3f}")
        
 
 if __name__ == "__main__":
-    run() 
+    app.run(main)
