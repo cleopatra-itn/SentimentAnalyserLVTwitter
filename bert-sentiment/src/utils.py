@@ -11,11 +11,13 @@ def categorical_accuracy(preds, y):
     correct = max_preds.squeeze(1).eq(y)
     return correct.sum() / torch.FloatTensor([y.shape[0]])
 
-
 def label_encoder(x):
     label_vec = {"0": 0, "1": 1, "-1": 2}
     return label_vec[x.replace("__label__", "")]
 
+def label_decoder(x):
+    label_vec = { 0:"U",  1:"P",  2:"N"}
+    return label_vec[x]
 
 def write_embeddings_to_file(model, x):
     pass

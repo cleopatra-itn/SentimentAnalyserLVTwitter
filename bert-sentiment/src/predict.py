@@ -14,7 +14,7 @@ import config
 import dataset
 import engine
 from model import BERTBaseUncased
-from utils import categorical_accuracy, label_encoder
+from utils import categorical_accuracy, label_encoder, label_decoder
 
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
@@ -36,15 +36,24 @@ writer = SummaryWriter()
 logger.add("experiment.log")
 
 flags.DEFINE_boolean('features', True, "")
+flags.DEFINE_string('test_file', None, "")
+flags.DEFINE_string('model_path', None, "")
+
 FLAGS = flags.FLAGS
 
 
 def main(_):
-
     test_file = config.DATASET_LOCATION + "eval.prep.test.csv"
-    df_test = pd.read_csv(test_file).fillna("none").head(51)
+    model_path = config.MODEL_PATH
+    if FLAGS.test_file:
+        test_file = FLAGS.test_file
+    if FLAGS.model_path:
+        model_path = FLAGS.model_path
+    df_test = pd.read_csv(test_file).fillna("none")
+    
     # Commenting as there are no labels
-    df_test.label = df_test.label.apply(label_encoder)
+    if FLAGS.features:
+        df_test.label = df_test.label.apply(label_encoder)
 
     logger.info(f"Bert Model: {config.BERT_PATH}")
     logger.info(
@@ -71,6 +80,11 @@ def main(_):
 
     outputs, extracted_features = engine.predict_fn(
         test_data_loader, model, device, extract_features=FLAGS.features)
+    df_test["predicted"] = outputs
+    # save file 
+    df_test.to_csv(model_path.split(
+        "/")[-2]+'.csv', header=None, index=False)
+    
     if FLAGS.features:
         pca = PCA(n_components=50, random_state=7)
         X1 = pca.fit_transform(extracted_features)
@@ -91,11 +105,14 @@ def main(_):
         plt.figure(figsize=(20, 15))
         p1 = sns.scatterplot(x=X["x1"], y=X["y1"], palette="coolwarm")
         # p1.set_title("development-"+str(row+1)+", layer -1")
-        X["texts"] = df_test.label.astype(str)
+        X["texts"] = ["@G" + label_decoder(output) if output == value else "@R-" + label_decoder(value) + "-" + label_decoder(output)
+                      for output, value in zip(outputs, df_test.label.values)]
+
+        # df_test.label.astype(str)
         #([str(output)+"-" + str(value)] for output, value in zip(outputs, df_test.label.values))
         # Label each datapoint with the word it corresponds to
         for line in X.index:
-            text = X.loc[line, "texts"]
+            text = X.loc[line, "texts"]+"-"+str(line)
             if "@P" in text:
                 p1.text(X.loc[line, "x1"]+0.2, X.loc[line, "y1"], text[2:], horizontalalignment='left',
                         size='medium', color='blue', weight='semibold')
@@ -109,8 +126,11 @@ def main(_):
                 p1.text(X.loc[line, "x1"]+0.2, X.loc[line, "y1"], text, horizontalalignment='left',
                         size='medium', color='black', weight='semibold')
         plt.show()
-        plt.savefig('figure.png') 
-
+        plt.savefig(model_path.split(
+            "/")[-2]+'-figure.svg', format="svg")
+        # loocv = model_selection.LeaveOneOut()
+        # model = KNeighborsClassifier(n_neighbors=8)
+        # results = model_selection.cross_val_score(model, X, Y, cv=loocv)
         # for i, j in outputs, extracted_features:
         #     utils.write_embeddings_to_file(extracted_features, outputs)
 
