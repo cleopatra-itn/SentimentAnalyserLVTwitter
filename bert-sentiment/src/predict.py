@@ -105,21 +105,29 @@ def main(_):
         plt.figure(figsize=(20, 15))
         p1 = sns.scatterplot(x=X["x1"], y=X["y1"], palette="coolwarm")
         # p1.set_title("development-"+str(row+1)+", layer -1")
-        X["texts"] = ["@G" + label_decoder(output) if output == value else "@R-" + label_decoder(value) + "-" + label_decoder(output)
-                      for output, value in zip(outputs, df_test.label.values)]
+        x_texts = []
+        for output, value in zip(outputs, df_test.label.values):
+            if output == value:
+                x_texts.append("@"+label_decoder(output)[0] + label_decoder(output))
+            else:
+                x_texts.append(label_decoder(value) + "-" + label_decoder(output))
+
+        X["texts"] = x_texts
+        # X["texts"] = ["@G" + label_decoder(output) if output == value else "@R-" + label_decoder(value) + "-" + label_decoder(output)
+        #               for output, value in zip(outputs, df_test.label.values)]
 
         # df_test.label.astype(str)
         #([str(output)+"-" + str(value)] for output, value in zip(outputs, df_test.label.values))
         # Label each datapoint with the word it corresponds to
         for line in X.index:
             text = X.loc[line, "texts"]+"-"+str(line)
-            if "@P" in text:
+            if "@U" in text:
                 p1.text(X.loc[line, "x1"]+0.2, X.loc[line, "y1"], text[2:], horizontalalignment='left',
                         size='medium', color='blue', weight='semibold')
-            elif "@G" in text:
+            elif "@P" in text:
                 p1.text(X.loc[line, "x1"]+0.2, X.loc[line, "y1"], text[2:], horizontalalignment='left',
                         size='medium', color='green', weight='semibold')
-            elif "@R" in text:
+            elif "@N" in text:
                 p1.text(X.loc[line, "x1"]+0.2, X.loc[line, "y1"], text[2:], horizontalalignment='left',
                         size='medium', color='red', weight='semibold')
             else:
