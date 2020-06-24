@@ -50,7 +50,7 @@ def main(_):
     if FLAGS.model_path:
         model_path = FLAGS.model_path
     df_test = pd.read_csv(test_file).fillna("none")
-    
+
     # Commenting as there are no labels
     if FLAGS.features:
         df_test.label = df_test.label.apply(label_encoder)
@@ -75,16 +75,16 @@ def main(_):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = BERTBaseUncased()
     model.load_state_dict(torch.load(
-        config.MODEL_PATH, map_location=torch.device(device)))
+        model_path, map_location=torch.device(device)))
     model.to(device)
 
     outputs, extracted_features = engine.predict_fn(
         test_data_loader, model, device, extract_features=FLAGS.features)
     df_test["predicted"] = outputs
-    # save file 
+    # save file
     df_test.to_csv(model_path.split(
         "/")[-2]+'.csv', header=None, index=False)
-    
+
     if FLAGS.features:
         pca = PCA(n_components=50, random_state=7)
         X1 = pca.fit_transform(extracted_features)
@@ -108,9 +108,11 @@ def main(_):
         x_texts = []
         for output, value in zip(outputs, df_test.label.values):
             if output == value:
-                x_texts.append("@"+label_decoder(output)[0] + label_decoder(output))
+                x_texts.append("@"+label_decoder(output)
+                               [0] + label_decoder(output))
             else:
-                x_texts.append(label_decoder(value) + "-" + label_decoder(output))
+                x_texts.append(label_decoder(value) +
+                               "-" + label_decoder(output))
 
         X["texts"] = x_texts
         # X["texts"] = ["@G" + label_decoder(output) if output == value else "@R-" + label_decoder(value) + "-" + label_decoder(output)
