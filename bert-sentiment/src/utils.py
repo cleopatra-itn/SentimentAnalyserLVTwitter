@@ -19,7 +19,7 @@ def label_decoder(x):
     label_vec = { 0:"U",  1:"P",  2:"N"}
     return label_vec[x]
 
-def write_embeddings_to_file(model, x):
-    pass
-    # write the
-    # write it as embeddings, target, predicted as list or json
+def label_full_decoder(x):
+    label_vec = { 0:"Neutral",  1:"Positive",  2:"Negative"}
+    return label_vec[x]
+

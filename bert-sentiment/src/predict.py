@@ -1,28 +1,27 @@
 import datetime
 import random
 
+import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import torch
 import torch.nn as nn
 from absl import app, flags, logging
 from loguru import logger
+from scipy import stats
 from sklearn import metrics, model_selection
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 from torch.utils.tensorboard import SummaryWriter
 
 import config
 import dataset
 import engine
 from model import BERTBaseUncased
-from utils import categorical_accuracy, label_encoder, label_decoder
+from utils import categorical_accuracy, label_decoder, label_encoder
 
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-from scipy import stats
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import matplotlib
 matplotlib.rcParams['interactive'] == True
 
 SEED = 42
@@ -72,7 +71,8 @@ def main(_):
         num_workers=3
     )
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = config.device
+    
     model = BERTBaseUncased()
     model.load_state_dict(torch.load(
         model_path, map_location=torch.device(device)))
@@ -92,10 +92,6 @@ def main(_):
                     learning_rate=1000, n_iter=1500)
         X1 = tsne.fit_transform(X1)
         # if row == 0: print("Shape after t-SNE: ", X1.shape)
-
-        # # Recording the position of the tokens, to be used in the plot
-        # position = np.array(list(span))
-        # position = position.reshape(-1,1)
 
         X = pd.DataFrame(np.concatenate([X1], axis=1),
                          columns=["x1", "y1"])

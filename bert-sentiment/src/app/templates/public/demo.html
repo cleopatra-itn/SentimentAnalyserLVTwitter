@@ -1,0 +1,52 @@
+<!-- templates/index.html -->
+<html>
+
+<head>
+  <title>Demo</title>
+</head>
+
+<body>
+  {% extends "template.html" %}
+  {% block content %}
+  <h3>Demo</h3>
+
+  <!-- <section class="text-gray-700 body-font">
+      <div class="container px-5 py-24 mx-auto">
+        <div class="lg:w-2/3 flex flex-col sm:flex-row sm:items-center items-start mx-auto">
+          <h1 class="flex-grow sm:pr-16 text-2xl font-medium title-font text-gray-900">Slow-carb next level shoindxgoitch ethical authentic, scenester sriracha forage.</h1>
+          <button class="flex-shrink-0 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg mt-10 sm:mt-0">Button</button>
+        </div>
+      </div>
+    </section> -->
+  <section class="text-gray-700 body-font relative">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="flex flex-col text-center w-full mb-12">
+        <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Sentiment Analysis on Latvian Tweets
+        </h1>
+        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">3 class classification (positive, negative and neutral).
+        </p>
+      </div>
+      <div class="lg:w-1/2 md:w-2/3 mx-auto">
+        <form>
+          <div class="flex flex-wrap -m-2">
+            <div class="p-2 w-full">
+              <textarea id="sentenceInput" name="sentenceInput"
+                class="w-full bg-gray-100 rounded border border-gray-400 focus:outline-none h-48 focus:border-indigo-500 text-base px-4 py-2 resize-none block"
+                placeholder="Message"></textarea>
+            </div>
+            <div class="p-2 w-full">
+              <button type="submit"
+                class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Predict</button>
+            </div>
+        </form>
+      </div>
+      <div id="successAlert" class="alert alert-success" role="alert" style="display:none;"></div>
+      <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none;"></div>
+      <div id="result"></div>
+    </div>
+    </div>
+  </section>
+  {% endblock %}
+</body>
+
+</html>

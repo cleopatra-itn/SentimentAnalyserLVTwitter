@@ -1,75 +1,84 @@
-import config
-import torch
 import flask
-from flask import Flask
-from flask import request
+import torch
+from flask import Flask, render_template, request
+from utils import label_full_decoder
+import sys
+import config
+import dataset
+import engine
 from model import BERTBaseUncased
 
-import torch.nn as nn
-
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='app/static',
+            template_folder='app/templates/public')
 
 MODEL = None
-DEVICE = "cuda"
+DEVICE = config.device
 
-def sentence_prediction(sentence, model):
-    tokenizer = config.TOKENIZER
-    max_len = config.MAX_LEN
-    review = str(sentence)
-    review = " ".join(review.split())
 
-    inputs = tokenizer.encode_plus(
-        review,
-        None,
-        add_special_tokens=True,
-        max_length=max_len
+def sentence_prediction(sentence):
+
+    model_path = config.MODEL_PATH
+
+    test_dataset = dataset.BERTDataset(
+        review=[sentence],
+        target=[0]
     )
 
-    ids = inputs["input_ids"]
-    mask = inputs["attention_mask"]
-    token_type_ids = inputs["token_type_ids"]
-
-    padding_length = max_len - len(ids)
-    ids = ids + ([0] * padding_length)
-    mask = mask + ([0] * padding_length)
-    token_type_ids = token_type_ids + ([0] * padding_length)
-
-    ids = torch.tensor(ids, dtype=torch.long).unsqueeze(0)
-    mask = torch.tensor(mask, dtype=torch.long).unsqueeze(0)
-    token_type_ids = torch.tensor(token_type_ids, dtype=torch.long).unsqueeze(0)
-
-    ids = ids.to(DEVICE, dtype=torch.long)
-    token_type_ids = token_type_ids.to(DEVICE, dtype=torch.long)
-    mask = mask.to(DEVICE, dtype=torch.long)
-
-    outputs = model(
-        ids=ids,
-        mask=mask,
-        token_type_ids=token_type_ids
+    test_data_loader = torch.utils.data.DataLoader(
+        test_dataset,
+        batch_size=config.VALID_BATCH_SIZE,
+        num_workers=3
     )
 
-    outputs = torch.sigmoid(outputs).cpu().detach().numpy()
-    return outputs[0][0]
+    device = config.device
+
+    model = BERTBaseUncased()
+    model.load_state_dict(torch.load(
+        model_path, map_location=torch.device(device)))
+    model.to(device)
+
+    outputs, [] = engine.predict_fn(test_data_loader, model, device)
+    print(outputs)
+    return outputs[0]
+    # try:
+    #     passexcept Exception as exp:
+    #     print(exp, file=sys.stderr)
 
 
-@app.route("/predict")
+@app.route("/predict", methods=['POST'])
 def predict():
-    sentence = request.args.get("sentence")
-    positive_prediction = sentence_prediction(sentence, model=MODEL)
-    negative_prediction = 1 - positive_prediction
-    response = {}
-    response["response"] = {
-        'positive': str(positive_prediction),
-        'negative': str(negative_prediction),
-        'sentence': str(sentence)
+    print(request.form, file=sys.stderr)
+    # print([(x) for x in request.get_json()],file=sys.stderr)
+    # sentence = request.get_json().get("sentence","")
+    sentence= request.form['sentence']
+    print(sentence, file=sys.stderr)
+    prediction= sentence_prediction(sentence)
+    response= {}
+    response["response"]= {
+        'sentence': sentence,
+        'prediction': label_full_decoder(prediction),
     }
     return flask.jsonify(response)
 
 
+@ app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@ app.route("/demo")
+def demo():
+    return render_template("demo.html")
+
+
+@ app.route("/models")
+def models():
+    return render_template("models.html")
+
+
 if __name__ == "__main__":
-    MODEL = BERTBaseUncased()
-    MODEL = nn.DataParallel(MODEL)
-    MODEL.load_state_dict(torch.load(config.MODEL_PATH))
-    MODEL.to(DEVICE)
+    MODEL= BERTBaseUncased()
+    MODEL.load_state_dict(torch.load(
+        config.MODEL_PATH, map_location=torch.device(DEVICE)))
     MODEL.eval()
-    app.run()
+    app.run(debug=True)

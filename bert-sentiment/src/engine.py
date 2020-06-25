@@ -91,7 +91,7 @@ def predict_fn(data_loader, model, device, extract_features=False):
             ids = d["ids"]
             token_type_ids = d["token_type_ids"]
             mask = d["mask"]
-            targets = d["targets"]
+            # targets = d["targets"]
 
             ids = ids.to(device, dtype=torch.long)
             token_type_ids = token_type_ids.to(device, dtype=torch.long)
