@@ -2,4 +2,6 @@ body {
     background-color: #ffffff;
   }
 
-  
+  button[type="submit"]:disabled {
+    background: #dddddd;
+  }

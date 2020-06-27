@@ -7,6 +7,8 @@ import config
 import dataset
 import engine
 from model import BERTBaseUncased
+from tokenizer import tokenizer
+T = tokenizer.TweetTokenizer(preserve_handles=True, preserve_hashes=True, preserve_case=False, preserve_url=False)
 
 app = Flask(__name__, static_url_path='', static_folder='app/static',
             template_folder='app/templates/public')
@@ -14,9 +16,28 @@ app = Flask(__name__, static_url_path='', static_folder='app/static',
 MODEL = None
 DEVICE = config.device
 
+def preprocess(text):
+    tokens = T.tokenize(text)
+    print(tokens,file=sys.stderr)
+    ptokens =[]
+    for index, token in enumerate(tokens):
+        if "@" in token:
+            if index>0:
+                # check if previous token was mention 
+                if "@" in tokens[index-1]:
+                    pass
+                else:
+                    ptokens.append("mention_0")
+            else:
+                ptokens.append("mention_0")
+        else:
+            ptokens.append(token)
+        
+    print(ptokens, file=sys.stderr)
+    return " ".join(ptokens)
 
 def sentence_prediction(sentence):
-
+    sentence = preprocess(sentence)
     model_path = config.MODEL_PATH
 
     test_dataset = dataset.BERTDataset(
@@ -50,15 +71,18 @@ def predict():
     print(request.form, file=sys.stderr)
     # print([(x) for x in request.get_json()],file=sys.stderr)
     # sentence = request.get_json().get("sentence","")
-    sentence= request.form['sentence']
-    print(sentence, file=sys.stderr)
-    prediction= sentence_prediction(sentence)
-    response= {}
-    response["response"]= {
-        'sentence': sentence,
-        'prediction': label_full_decoder(prediction),
-    }
-    return flask.jsonify(response)
+    sentence = request.form['sentence']
+    if sentence:
+        print(sentence, file=sys.stderr)
+        prediction= sentence_prediction(sentence)
+        response= {}
+        response["response"]= {
+            'sentence': sentence,
+            'prediction': label_full_decoder(prediction),
+        }
+        return flask.jsonify(response)
+    else:
+        return flask.jsonify({"error": "empty text"})
 
 
 @ app.route("/")
