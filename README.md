@@ -10,14 +10,15 @@ This is the repository for the paper **Pretraining and Fine-Tuning Strategies fo
 - Pretrained Latvian Language model (link will updated here)
 -  
 ### How to run
-- Update the config file with the Pretrained LM link 
+- Either download the pretrained models or train new bert models using 
+  - mBERT https://github.com/huggingface/transformers/blob/master/examples/language-modeling/
+  - For pretraining ALBERT and ELECTRA https://github.com/shoarora/lmtuners/tree/master/experiments/disc_lm_small
+- Update the config file with the pretrained models link 
 - Update train.py for the locations of the dataset
 - train.py expects pre-processed and pre-split data files( train, dev, test)
 
 `
-cd bert-sentiment/src
-`
-`
+cd bert-sentiment/src;
 python train.py
 
 `
