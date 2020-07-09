@@ -12,6 +12,7 @@ This is the repository for the paper **Pretraining and Fine-Tuning Strategies fo
 - Update the config file with the Pretrained LM link 
 - Update train.py for the locations of the dataset
 - train.py expects pre-processed and pre-split data files( train, dev, test)
+
 `
 cd bert-sentiment/src
 python train.py
