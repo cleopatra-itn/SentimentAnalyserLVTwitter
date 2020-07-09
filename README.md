@@ -15,6 +15,7 @@ This is the repository for the paper **Pretraining and Fine-Tuning Strategies fo
 
 `
 cd bert-sentiment/src
+
 python train.py
 `
 - for prediction
