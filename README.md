@@ -4,7 +4,7 @@ This is the repository for the paper **Pretraining and Fine-Tuning Strategies fo
 ### 
 
 ### Data
-- Since the tweeter data cannot be shared directly due to twitter terms, kindly refer https://github.com/pmarcis/latvian-tweet-corpus for the data.
+- Since the twiiter data cannot be shared directly due to twitter terms, kindly refer https://github.com/pmarcis/latvian-tweet-corpus for the data.
 
 ### Requirements
 - Pretrained Latvian Language model (link will updated here)
@@ -20,7 +20,6 @@ This is the repository for the paper **Pretraining and Fine-Tuning Strategies fo
 `
 cd bert-sentiment/src;
 python train.py
-
 `
 - for prediction
 
