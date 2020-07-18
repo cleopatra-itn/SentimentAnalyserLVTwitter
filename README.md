@@ -4,7 +4,7 @@ This is the repository for the paper **Pretraining and Fine-Tuning Strategies fo
 ### 
 
 ### Data
-- Since the twiiter data cannot be shared directly due to twitter terms, kindly refer https://github.com/pmarcis/latvian-tweet-corpus for the data.
+- Since the twitter data cannot be shared directly due to twitter terms, kindly refer https://github.com/pmarcis/latvian-tweet-corpus for the data.
 
 ### Requirements
 - Pretrained Latvian Language model (link will updated here)
