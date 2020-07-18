@@ -19,6 +19,7 @@ This is the repository for the paper **Pretraining and Fine-Tuning Strategies fo
 
 `
 cd bert-sentiment/src;
+
 python train.py
 `
 - for prediction
@@ -29,7 +30,10 @@ python predict.py
 
 ### Performance Metrices
 
-### Publications
+### Publication
+Pretraining and Fine-Tuning Strategies for Sentiment Analysis of Latvian Tweets. To appear in Baltic-HLT 2020
 
 ### Acknowledgement
 The project has received funding from the European Union’s Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie grant agreement no. 812997.
+
+### This work was done as a part of internship at [TILDE](www.tilde.com).
