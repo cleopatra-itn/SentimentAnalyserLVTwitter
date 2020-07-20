@@ -6,8 +6,9 @@ TRAIN_BATCH_SIZE = 8
 VALID_BATCH_SIZE = 4
 EPOCHS = 5
 
-DATASET_LOCATION = "/mnt/c/Users/gaurish.thakkar/Desktop/lv-twitter-data-csv/lv-twitter-data-csv/"
-MODEL_PATH = "/mnt/c/Users/gaurish.thakkar/Desktop/mbert-2epoch-gold-lower/model.bin"
+# Folder to contain all the datasets
+DATASET_LOCATION = "" # 
+MODEL_PATH = "mbert-7epoch-gold-lower/model.bin"
 
 
 # MBERT Raw Version
@@ -17,7 +18,7 @@ MODEL_PATH = "/mnt/c/Users/gaurish.thakkar/Desktop/mbert-2epoch-gold-lower/model
 # BERT_PATH = "/home/TILDE.LV/gaurish.thakkar/experiments/bert-twitter-fine-tunning/LatvianTwittermBERT-v1"
 
 # 7 EPOCH Version
-BERT_PATH = "/mnt/c/Users/gaurish.thakkar/Desktop/LatvianTwittermBERT-v1"
+BERT_PATH = "FFZG-cleopatra/bert-emoji-latvian-twitter"
 
 # 7 EPOCH Version + emoticons
 # BERT_PATH = "/home/TILDE.LV/gaurish.thakkar/experiments/bert-twitter-language-pretraining/models/LatvianTwittermBERT-v2/checkpoint-106000"
