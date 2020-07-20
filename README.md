@@ -15,6 +15,7 @@ Performs 3 class(Positive, Negative and Neutral) classification on Latvian tweet
     - Update train.py for the locations of the dataset
     - train.py expects pre-processed and pre-split data files( train, dev, test)
 - #### Predict
+  - Either traint the model from scatch or download the pretrained mode from https://ffzghr-my.sharepoint.com/:f:/g/personal/gthakkar_m_ffzg_hr/EoCPu_Z4dhJPuRPGUipBra0BVLOe9e2a-kHuKGdtOjcoyA?e=7cjzIg
   - To perform a prediction on file, create a csv file with tweets with header **text** and  **label**. The label column is blank.
   - `python predict.py --test_file  --model_path `. where ignore the model_path flag if it is set in config.py. Pass the test_file created in previous step.
 
