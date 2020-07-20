@@ -10,6 +10,7 @@ EPOCHS = 5
 DATASET_LOCATION = "" # 
 MODEL_PATH = "mbert-7epoch-gold-lower/model.bin"
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # MBERT Raw Version
 # BERT_PATH = "bert-base-multilingual-cased"
