@@ -94,7 +94,6 @@ def predict():
 
 @app.route("/sentimentanalyzer/")
 def index():
-    print("sending file...", file=sys.stdout)
     return render_template("index.html")
 
 
@@ -106,6 +105,11 @@ def demo():
 @app.route("/sentimentanalyzer/models")
 def models():
     return render_template("models.html")
+
+
+@app.route("/sentimentanalyzer/about")
+def about():
+    return render_template("about.html")
 
 
 if __name__ == "__main__":
