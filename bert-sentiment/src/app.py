@@ -8,10 +8,44 @@ import dataset
 import engine
 from model import BERTBaseUncased
 from tokenizer import tokenizer
+from werkzeug.serving import run_simple
+from werkzeug.wsgi import DispatcherMiddleware
+
+class PrefixMiddleware(object):
+
+    def __init__(self, app, prefix=''):
+        self.app = app
+        self.prefix = prefix
+
+    def __call__(self, environ, start_response):
+
+        if environ['PATH_INFO'].startswith(self.prefix):
+            environ['PATH_INFO'] = environ['PATH_INFO'][len(self.prefix):]
+            environ['SCRIPT_NAME'] = self.prefix
+            return self.app(environ, start_response)
+        else:
+            start_response('404', [('Content-Type', 'text/plain')])
+            return ["This url does not belong to the app.".encode()]
+
+
 T = tokenizer.TweetTokenizer(preserve_handles=True, preserve_hashes=True, preserve_case=False, preserve_url=False)
 
-app = Flask(__name__, static_url_path='', static_folder='app/static',
-            template_folder='app/templates/public')
+app = Flask(__name__,
+	static_folder='app_resources/static',
+	static_url_path='/sentimentanalyzer', 
+	instance_relative_config=True,  
+	template_folder='app_resources/templates/public')
+# app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/sentimentanalyzer')
+# app.config['SERVER_NAME'] = "cleopatra.ijs.si:1095"
+# app.config['APPLICATION_ROOT'] = "/sentimentanalyzer/"
+
+
+def simple(env, resp):
+    resp(b'200 OK', [(b'Content-Type', b'text/plain')])
+    return [b'Hello WSGI World']
+
+# app.wsgi_app = DispatcherMiddleware(simple, {'/sentimentanalyzer/': app.wsgi_app})
+
 
 MODEL = None
 DEVICE = config.device
@@ -66,7 +100,7 @@ def sentence_prediction(sentence):
     #     print(exp, file=sys.stderr)
 
 
-@app.route("/predict", methods=['POST'])
+@app.route("/sentimentanalyzer/predict", methods=['POST'])
 def predict():
     print(request.form, file=sys.stderr)
     # print([(x) for x in request.get_json()],file=sys.stderr)
@@ -84,18 +118,16 @@ def predict():
     else:
         return flask.jsonify({"error": "empty text"})
 
-
-@ app.route("/")
+@app.route("/sentimentanalyzer/")
 def index():
+    print("sending file...",file=sys.stdout)
     return render_template("index.html")
 
-
-@ app.route("/demo")
+@app.route("/sentimentanalyzer/demo")
 def demo():
     return render_template("demo.html")
 
-
-@ app.route("/models")
+@app.route("/sentimentanalyzer/models")
 def models():
     return render_template("models.html")
 
@@ -105,4 +137,6 @@ if __name__ == "__main__":
     MODEL.load_state_dict(torch.load(
         config.MODEL_PATH, map_location=torch.device(DEVICE)))
     MODEL.eval()
-    app.run(debug=True)
+    
+    app.run("0.0.0.0",port=1095, debug=True)
+# host="http://cleopatra.ijs.si/sentimentanalyzer"

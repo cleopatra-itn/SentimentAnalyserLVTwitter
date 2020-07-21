@@ -18,7 +18,7 @@ $(document).ready(function() {
 				sentence : $('#sentenceInput').val(),
 			},
 			type : 'POST',
-			url: '/predict',
+			url: '/sentimentanalyzer/predict',
 			complete: function() {
 				me.data('requestRunning', false);
 			}

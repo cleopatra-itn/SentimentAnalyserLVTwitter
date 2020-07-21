@@ -1,5 +1,6 @@
 import transformers
 import os
+import torch
 
 MAX_LEN = 150 #256
 TRAIN_BATCH_SIZE = 8
@@ -8,7 +9,7 @@ EPOCHS = 5
 
 # Folder to contain all the datasets
 DATASET_LOCATION = "" # 
-MODEL_PATH = "mbert-7epoch-gold-lower/model.bin"
+MODEL_PATH = "trained_models/mbert-7epoch-lower/model.bin"
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
