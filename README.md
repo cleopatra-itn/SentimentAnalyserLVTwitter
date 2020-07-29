@@ -35,4 +35,4 @@ The project has received funding from the European Union’s Horizon 2020 resear
 ### This work was done as a part of internship at [TILDE](www.tilde.com).
 
 ### License
-This work is MIT licensed. See the (LICENSE file)[LICENSE] for full details.
+This work is MIT licensed. See the LICENSE file for full details.
