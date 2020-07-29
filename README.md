@@ -33,3 +33,6 @@ Pretraining and Fine-Tuning Strategies for Sentiment Analysis of Latvian Tweets.
 The project has received funding from the European Union’s Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie grant agreement no. 812997.
 
 ### This work was done as a part of internship at [TILDE](www.tilde.com).
+
+### License
+This work is MIT licensed. See the (LICENSE file)[LICENSE] for full details.
