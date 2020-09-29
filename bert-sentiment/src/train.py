@@ -29,29 +29,16 @@ writer = SummaryWriter()
 logger.add("experiment.log")
 
 
-def run(dataset_index):
+def run():
 
-    datasets =[
-    "gold.prep-auto.full.prep.{0}.csv", 
-    "gold.prep-auto.no-emoticons.prep.{0}.csv", 
-    "gold.prep-auto.prep.{0}.csv",
-    "gold.prep-english.prep.{0}.csv" ,
-    "gold.prep-peisenieks.prep.{0}.csv",
-    "gold.prep.{0}.csv"
-    ] 
-    # dataset_index = 5 #0-5
-
-    train_file = config.DATASET_LOCATION + datasets[dataset_index].format("train")
+    train_file = config.TRAIN_PROC
     df_train = pd.read_csv(train_file).fillna("none")
-    df_train.label = df_train.label.apply(label_encoder)
 
-    valid_file = config.DATASET_LOCATION + datasets[dataset_index].format("dev") #"gold.prep-auto.full.prep.dev.csv" #gold.prep-auto.no-emoticons.prep.dev.csv" #gold.prep-auto.prep.dev.csv" #"gold.prep-english.prep.dev.csv" #"gold.prep-peisenieks.prep.dev.csv" #"gold.prep.dev.csv"
+    valid_file = config.DEVEL_PROC
     df_valid = pd.read_csv(valid_file).fillna("none")
-    df_valid.label = df_valid.label.apply(label_encoder)
 
-    test_file = config.DATASET_LOCATION + "eval.prep.test.csv"
+    test_file = config.EVAL_PROC
     df_test = pd.read_csv(test_file).fillna("none")
-    df_test.label = df_test.label.apply(label_encoder)
     
     logger.info(f"Bert Model: {config.BERT_PATH}")
     logger.info(f"Current date and time :{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ")
@@ -168,7 +155,4 @@ def run(dataset_index):
 
 
 if __name__ == "__main__":
-    run(2) #5 2 4 1 0 3 2
-    # uncomment if the same model needs to be run across all the datasets
-    # for i in range(1,7):
-        # run(i*-1)
+    run()

@@ -4,6 +4,13 @@ Performs 3 class(Positive, Negative and Neutral) classification on Latvian tweet
 
 ### Data
 - Latvian Tweet Corpus. Since the twitter data cannot be shared directly due to twitter terms, kindly refer https://github.com/pmarcis/latvian-tweet-corpus for the data.
+- Format - csv with label (0 - neutral; 1 - positive; 2 - negative) and text:
+```
+label,text
+1,"@maljorka Hehe, man tad labāk garšo bez nekā, nevis šādi. :D Ai, gaumes ir tik atšķirīgas."
+0,@IngaStirna Ābolu šarlote.
+2,"Šodien bijām pie vecmāmiņas (malka + jāaizved lietas). Es gaidīju, ka paliks labāk, un man viņas pietrūks mazāk, bet mēs ar viņu varējām sarunāties tikai caur logu un pusdienu vietā apēdām bulciņas mašīnā. Nav ok."
+```
 
 ### How to run
 - #### Train
@@ -20,10 +27,10 @@ Performs 3 class(Positive, Negative and Neutral) classification on Latvian tweet
   - `python predict.py --test_file  --model_path `. where ignore the model_path flag if it is set in config.py. Pass the test_file created in previous step.
 
 - #### DEMO
- - To run demo locally `python app.py`
- - Visit http://cleopatra.ijs.si/sentimentanalyzer/demo for the live demo
+  - To run demo locally `python app.py`
+  - Visit http://cleopatra.ijs.si/sentimentanalyzer/demo for the live demo
 
-### Performance Metrices
+### Performance Metrics
 Accuracy score of around 76% on time-balanced dataset.
 
 ### Publication
