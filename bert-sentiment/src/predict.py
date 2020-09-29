@@ -42,17 +42,13 @@ FLAGS = flags.FLAGS
 
 
 def main(_):
-    test_file = config.DATASET_LOCATION + "eval.prep.test.csv"
+    test_file = config.EVAL_PROC
     model_path = config.MODEL_PATH
     if FLAGS.test_file:
         test_file = FLAGS.test_file
     if FLAGS.model_path:
         model_path = FLAGS.model_path
     df_test = pd.read_csv(test_file).fillna("none")
-
-    # Commenting as there are no labels
-    if FLAGS.features:
-        df_test.label = df_test.label.apply(label_encoder)
 
     logger.info(f"Bert Model: {config.BERT_PATH}")
     logger.info(

@@ -7,23 +7,18 @@ TRAIN_BATCH_SIZE = 8
 VALID_BATCH_SIZE = 4
 EPOCHS = 5
 
-# Folder to contain all the datasets
-DATASET_LOCATION = "" # 
-MODEL_PATH = "trained_models/mbert-7epoch-lower/model.bin"
+# Processed training, development and evaluation files
+TRAIN_PROC = ""
+DEVEL_PROC = ""
+EVAL_PROC = ""
+
+# Path to save sentiment analysis model
+MODEL_PATH = "model.bin"
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-# MBERT Raw Version
-# BERT_PATH = "bert-base-multilingual-cased"
-
-# 2 EPOCH Version
-# BERT_PATH = "bert-twitter-fine-tunning/LatvianTwittermBERT-v1"
-
-# 7 EPOCH Version
-BERT_PATH = "FFZG-cleopatra/bert-emoji-latvian-twitter"
-
-# 7 EPOCH Version + emoticons
-# BERT_PATH = "bert-twitter-language-pretraining/models/LatvianTwittermBERT-v2/checkpoint-106000"
+# Path to the best BERT model checkpoint adapted using bert-twitter-language-pretraining or just MBERT Raw Version
+BERT_PATH = ""
 
 # TODO check if lower casing is required
 # BertTokenizer
